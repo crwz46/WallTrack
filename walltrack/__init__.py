@@ -10,6 +10,12 @@ from .comparator import WalletComparator
 from .scheduler import Scheduler
 from .autocomplete import install
 from .alerts import GasAlert
+from .holder_analyzer import HolderAnalyzer, HolderDataFetcher, ConcentrationMetrics
+
+try:
+    from .holder_charts import generate_charts
+except ImportError:
+    generate_charts = None
 
 try:
     from .web3_provider import Web3Provider

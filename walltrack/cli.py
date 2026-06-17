@@ -14,6 +14,7 @@ from .history import HistoryManager
 from .prices import PriceFeed
 from .comparator import cmd_compare
 from .alerts import GasAlert
+from .holder_analyzer import HolderAnalyzer
 
 
 def load_api_keys() -> Dict[str, str]:
@@ -297,6 +298,26 @@ def cmd_web3(args, api_keys):
     print(f"  Gas Price  : {data['gas_price']['gwei']} gwei")
 
 
+def cmd_holder(args, api_keys):
+    eth_key = api_keys.get("ETHERSCAN_API_KEY", "")
+    analyzer = HolderAnalyzer()
+    report = analyzer.analyze(
+        token_symbol=args.symbol,
+        contract=args.contract or "",
+        etherscan_key=eth_key,
+    )
+    HolderAnalyzer.display(report)
+
+    if args.charts:
+        try:
+            from .holder_charts import generate_charts
+            generate_charts(report, args.charts_dir)
+        except ImportError:
+            print("  Install matplotlib: pip install matplotlib")
+
+    return report
+
+
 def cmd_autocomplete(args, api_keys):
     from .autocomplete import install as install_comp
     install_comp(args.shell)
@@ -432,6 +453,9 @@ Examples:
   walltrack gas-alert 20                 Alert when gas < 20
   walltrack schedule add 0x...           Watch wallet
   walltrack autocomplete                 Tab completion
+  walltrack holder UNI                    Analyze top holders
+  walltrack holder SHIB --charts          Holder analysis + charts
+  walltrack holder --contract 0x...       Analyze any token
         """,
     )
 
@@ -486,6 +510,24 @@ Examples:
         "--shell",
         choices=["bash", "zsh", "powershell"],
         help="Shell for autocomplete installation",
+    )
+    parser.add_argument(
+        "--symbol",
+        default="",
+        help="Token symbol for holder analysis (default: UNI)",
+    )
+    parser.add_argument(
+        "--contract",
+        default="",
+        help="Token contract address for holder analysis",
+    )
+    parser.add_argument(
+        "--charts", action="store_true",
+        help="Generate matplotlib charts for holder analysis",
+    )
+    parser.add_argument(
+        "--charts-dir", default="charts",
+        help="Output directory for charts (default: charts)",
     )
 
     return parser
@@ -605,6 +647,21 @@ def run():
             print("Usage: walltrack schedule <add|list|start|stop> [...args]")
             return
         return cmd_schedule(args, api_keys)
+
+    if sys.argv[1] == "holder":
+        symbol = sys.argv[2] if len(sys.argv) >= 3 else "UNI"
+        args = parser.parse_args(["dummy"])
+        args.symbol = symbol
+        args.contract = None
+        args.charts = "--charts" in sys.argv
+        args.charts_dir = "charts"
+
+        if "--contract" in sys.argv:
+            ci = sys.argv.index("--contract") + 1
+            if ci < len(sys.argv):
+                args.contract = sys.argv[ci]
+
+        return cmd_holder(args, api_keys)
 
     args = parser.parse_args()
 
