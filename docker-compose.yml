@@ -1,0 +1,39 @@
+services:
+  cli:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: walltrack-cli
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+    stdin_open: true
+    tty: true
+    command: --interactive
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: walltrack-api
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile.bot
+    container_name: walltrack-bot
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+    depends_on:
+      - api

@@ -1,0 +1,32 @@
+# Byte-compiled
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Env
+.env
+*.env
+
+# Data
+data/
+*.db
+*.sqlite
+
+# Reports
+*.html
+*.csv
+*.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+.docker/
