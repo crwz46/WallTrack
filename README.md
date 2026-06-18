@@ -298,3 +298,23 @@ WallTrack/
 | Bot Development | python-telegram-bot |
 | Finance | Gas tracking, flash loan sims |
 | Infrastructure | Multi-service docker-compose |
+
+## 🌐 Ecosystem
+
+This project is part of a **5-repo analytics & AI ecosystem** by [crwz46](https://github.com/crwz46):
+
+| Repo | Focus |
+|------|-------|
+| 🏠 [WallTrack](https://github.com/crwz46/WallTrack) | Multi-chain wallet tracking, gas alerts, flash loans |
+| 🔍 [TokenVision](https://github.com/crwz46/TokenVision) | Token holder concentration, HHI/Gini, whale detection |
+| 🪂 [AirDropScanner](https://github.com/crwz46/AirDropScanner) | Multi-protocol airdrop eligibility checker |
+| 📊 [TradeLens](https://github.com/crwz46/TradeLens) | Market intelligence, risk engine, portfolio tracker |
+| 🧠 [DocuMind](https://github.com/crwz46/DocuMind) | RAG-powered Document Q&A with LLMs |
+
+## 📝 License
+
+MIT &mdash; see [LICENSE](LICENSE)
+
+---
+
+*Built by [crwz46](https://github.com/crwz46) &mdash; Data Scientist &amp; AI Engineer*
